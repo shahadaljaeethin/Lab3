@@ -10,9 +10,21 @@ public ArrayList<Media> getMedias(){return medias;}
 public void addUser(User user){users.add(user);}
 public void addMedia(Media media){medias.add(media);}
 public ArrayList<User> displayUsers(){
+int i=1;
+for(User u: users){
+System.out.println(i+"."+u.getUsername());
+i++;}
+
 return users;
 }
-public ArrayList<Media> displayMedia(){return medias;}
+public ArrayList<Media> displayMedia(){
+    int index=0;
+    for(Media m:medias) {
+        System.out.println(index+". {" + m + "}\n___________________________________________________________________________________________________________________________________________________________________________");
+        index++;
+    }
+
+return medias;}
 public User getUser(int index)throws Exception{
 if(index>=users.size()) throw new Exception("index wrong");
 return users.get(index);}

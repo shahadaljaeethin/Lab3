@@ -52,49 +52,56 @@ Novel action = new Novel("My cool grandfather","Moonerah Salman","400030",25,15,
     jarir.addMedia(action);
     jarir.addMedia(math);
     jarir.addMedia(programming);
-//finally interact with the user
-   // ArrayList<User> users = new ArrayList<>();
-    Scanner r = new Scanner(System.in);
-    System.out.println("Welcome to Jarir, please create your account\nUsername: ");
-    String username = r.nextLine();
-    System.out.println("email: ");
-    String email = r.nextLine();
-    jarir.addUser(new User(username,email));
-    System.out.println("Welcome! your account was made successfully, you have empty cart now, you can add media and perches them. ");
-    int keyUser=0;
-    for(int i=0;i<manyUsers.length;i++)
-    jarir.addUser(manyUsers[i]);
+    //add default users by system
+        for (int i = 0; i < manyUsers.length; i++)
+        jarir.addUser(manyUsers[i]);
+    //****finally interact with the user****
+    int choice = 0;  Scanner r = new Scanner(System.in);  int keyUser = 0;
 
-
-int choice=0; Media addThisItem;
-while(choice!=8) {
+    //Home page (log in\register)
     try {
+       System.out.println("Welcome to Jarir, please create your account\n1.log in\n2.create account: ");
+       choice = r.nextInt();
+       if (choice==2) {
+       jarir.addUser(createAcc(r));
+       }else {jarir.displayUsers();
+       keyUser = r.nextInt()-1;
+       r.nextLine();
+       }
+
+   }catch (Exception e){}
+
+
+//after entering user account
+    Media addThisItem;
+while(choice!=9) {
+        try {
         System.out.println("\n#Choose from menu:#\n1.show my cart\n2.show my previous perches\n3.show items(Media) in Jarir store\n4.search for a book\n5.switch account(change user)\n6.add media to cart\n7.complete purchase of my cart\n8.remove a media from my cart\n9.exit");
         choice=r.nextInt();
-        switch (choice) {
+         switch (choice) {
             case 1:
             if(jarir.getUser(keyUser).getShoppingCart().isEmpty())System.out.println("Cart is empty.");
+               else {
                for(Media m:jarir.getUser(keyUser).getShoppingCart())
-                   System.out.println(m);
-             break;
+               System.out.println(m);}
+               break;
 
             case 2:
                 if(jarir.getUser(keyUser).getPurchaseMediaList().isEmpty())System.out.println("no purchase yet.");
-
+                //-
                 for(Media m:jarir.getUser(keyUser).getPurchaseMediaList())
-                    System.out.println(m);
-            break;
+                System.out.println(m);
+                break;
 
             case 3:
-                for(Media m:jarir.getMedias())
-                    System.out.println("{"+m+"}\n___________________________________________________________________________________________________________________________________________________________________________");
+            jarir.displayMedia();
             break;
 
             case 4: System.out.println("write the title: ");
             r.nextLine();
             String title = r.nextLine();
             jarir.searchBook(title);
-             break;
+            break;
 
 
             case 5: System.out.println("log in with which account?\n0.create account");
@@ -103,7 +110,9 @@ while(choice!=8) {
                     System.out.println((i+1)+"-"+jarir.getUser(keyUser).getUsername());
                     keyUser=r.nextInt()-1;
 
-                if(keyUser>=jarir.getUsers().size()){keyUser=0; throw new Exception("please choose from shown menu");}
+                    if(keyUser>=jarir.getUsers().size()){keyUser=0; throw new Exception("please choose from shown menu");}
+                    if(keyUser==-1)    jarir.addUser(createAcc(r));
+
                break;
             case 6:
                 jarir.getUser(keyUser).addToCart(horror); break;
@@ -125,6 +134,14 @@ while(choice!=8) {
     }
 }
 }
-
+public static User createAcc(Scanner r){
+    System.out.println("Username:");
+    r.nextLine();
+    String username = r.nextLine();
+    System.out.println("email: ");
+    String email = r.nextLine();
+    System.out.println("Welcome! your account was made successfully, you have empty cart now, you can add media and perches them. ");
+    return new User(username,email);
+}
 
 }
