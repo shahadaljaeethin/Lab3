@@ -17,8 +17,20 @@ i++;}
 
 return users;
 }
+public ArrayList<Book> showBooks(){
+    ArrayList<Book> books = new ArrayList<>();
+    boolean isBook ;
+    for(Media media: medias)
+    {
+        isBook = media.getMediaType().equals("BestSelling book")||media.getMediaType().equals("Book")||media.getMediaType().equals("Novel")||media.getMediaType().equals("Academic Book")|media.getMediaType().equals("BestSelling Academic Book")||media.getMediaType().equals("BestSelling Novel");
+        if(isBook) books.add((Book) media);
+    }
+    int i=1;
+    for(Media book:books) {System.out.println(i+". "+book); i++;}
+    return books;
+}
 public ArrayList<Media> displayMedia(){
-    int index=0;
+    int index=1;
     for(Media m:medias) {
         System.out.println(index+". {" + m + "}\n___________________________________________________________________________________________________________________________________________________________________________");
         index++;

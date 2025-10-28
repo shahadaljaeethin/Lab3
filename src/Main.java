@@ -19,8 +19,8 @@ Store jarir = new Store();
     books1[2] = new Book("Draw Anatomy","Ayaso yami","609222",120,2);
     books1[3] = new Book("Super Rare Book","Emaan omran","360089",10,0);
 //----------------
-Novel horror = new Novel("Scary City","John Rose","400032",30,3,"horror");
-Novel action = new Novel("My cool grandfather","Moonerah Salman","400030",25,15,"action");
+    Novel horror = new Novel("Scary City","John Rose","400032",30,3,"horror");
+    Novel action = new Novel("My cool grandfather","Moonerah Salman","400030",25,15,"action");
 //-
     AcademicBook math = new AcademicBook("Math","Dr.Laylya salwan","100230",90,35,"Pre-calculus");
     AcademicBook programming = new AcademicBook("Learn Programming","Dr.Majd","100260",80,40,"Java");
@@ -35,7 +35,7 @@ Novel action = new Novel("My cool grandfather","Moonerah Salman","400030",25,15,
     Music[] musics = new Music[4];
     musics[0]= new Music("Costarica","Kairookee","01",15,"Ameer Aid");
     musics[1]= new Music("Brooklyn baby","Lana Del Rey","02",10,"Lana Del Rey");
-    musics[2]= new Music("Remember Me","Shahad Mohammed","03",5,"Arcane");
+    musics[2]= new Music("Remember Me","RIOT","03",5,"Arcane");
     musics[3]= new Music("Heavenly","Renaad Saleeh","04",6,"C.A.S");
 
  //4.add all media to the store.
@@ -57,10 +57,10 @@ Novel action = new Novel("My cool grandfather","Moonerah Salman","400030",25,15,
         jarir.addUser(manyUsers[i]);
     //****finally interact with the user****
     int choice = 0;  Scanner r = new Scanner(System.in);  int keyUser = 0;
-
+    ArrayList<Media> currentCart;
     //Home page (log in\register)
     try {
-       System.out.println("Welcome to Jarir, please create your account\n1.log in\n2.create account: ");
+       System.out.println("Welcome to Jarir,\n1.log in\n2.create account: ");
        choice = r.nextInt();
        if (choice==2) {
        jarir.addUser(createAcc(r));
@@ -73,68 +73,103 @@ Novel action = new Novel("My cool grandfather","Moonerah Salman","400030",25,15,
 
 
 //after entering user account
-    Media addThisItem;
-while(choice!=9) {
+    Media addThisItem; int index,rate;
+while(choice!=11) {
         try {
-        System.out.println("\n#Choose from menu:#\n1.show my cart\n2.show my previous perches\n3.show items(Media) in Jarir store\n4.search for a book\n5.switch account(change user)\n6.add media to cart\n7.complete purchase of my cart\n8.remove a media from my cart\n9.exit");
+        System.out.println("\n#Choose from menu:#\n1.show my cart\n2.show my previous purchases\n3.show items(Media) in Jarir store\n4.search for a book\n5.switch account(change user)\n6.add media to cart\n7.complete purchase of my cart\n8.remove a media from my cart\n9.rate a book\n10.get average of a book\n11.exit");
         choice=r.nextInt();
          switch (choice) {
-            case 1:
-            if(jarir.getUser(keyUser).getShoppingCart().isEmpty())System.out.println("Cart is empty.");
-               else {
-               for(Media m:jarir.getUser(keyUser).getShoppingCart())
-               System.out.println(m);}
-               break;
+          case 1:
+                 if(jarir.getUser(keyUser).getShoppingCart().isEmpty())System.out.println("Cart is empty.");
+                 else {
+                 for(Media m:jarir.getUser(keyUser).getShoppingCart())
+                 System.out.println(m);}
+                 break;
 
-            case 2:
+          case 2:
                 if(jarir.getUser(keyUser).getPurchaseMediaList().isEmpty())System.out.println("no purchase yet.");
                 //-
                 for(Media m:jarir.getUser(keyUser).getPurchaseMediaList())
                 System.out.println(m);
                 break;
 
-            case 3:
-            jarir.displayMedia();
-            break;
+                case 3:
+                jarir.displayMedia();
+                break;
 
-            case 4: System.out.println("write the title: ");
-            r.nextLine();
-            String title = r.nextLine();
-            jarir.searchBook(title);
-            break;
+           case 4:   System.out.println("write the title: ");
+                     r.nextLine();
+                      String title = r.nextLine();
+                     jarir.searchBook(title);
+                     break;
 
 
             case 5: System.out.println("log in with which account?\n0.create account");
-                     r.nextLine();
-                    for(int i=0;i<jarir.getUsers().size();i++)
-                    System.out.println((i+1)+"-"+jarir.getUser(keyUser).getUsername());
+                    r.nextLine();
+                    jarir.displayUsers();
                     keyUser=r.nextInt()-1;
 
                     if(keyUser>=jarir.getUsers().size()){keyUser=0; throw new Exception("please choose from shown menu");}
                     if(keyUser==-1)    jarir.addUser(createAcc(r));
 
-               break;
+                     break;
             case 6:
-                jarir.getUser(keyUser).addToCart(horror); break;
-            case 7:
-                jarir.getUser(keyUser).checkOut(); break;
+                     jarir.displayMedia();
+                     System.out.println("choose item:");
+                     index=r.nextInt();
+                     if(index<=0||index>jarir.getMedias().size()){index=1; throw new Exception("Wrong index");}
+                     jarir.getUser(keyUser).addToCart(jarir.getMedias().get(index-1));
+                     break;
+
+             case 7:
+                     jarir.getUser(keyUser).checkOut(); break;
 
             case 8:
-            jarir.getUser(keyUser).removeFromCart(horror);
-            break;
+                      currentCart= jarir.getUser(keyUser).getShoppingCart();
+                      index=1;
+                      for(Media m:currentCart){ System.out.println(index+". "+m); index++;}
 
-            case 9:
-                System.out.println("Thank you for visiting us!"); break;
-            default: throw new Exception("choose from 1 to 8.");
+                       System.out.println("choose item:");
+                       r.nextLine();
+                       index=r.nextInt();
+                       if(index<=0||index>jarir.getMedias().size()){index=1; throw new Exception("Wrong index");}
+                       jarir.getUser(keyUser).removeFromCart(jarir.getUser(keyUser).getShoppingCart().get(index-1));
 
+                       break;
+             case 9:
+                    jarir.showBooks();
+                    index = r.nextInt()-1;
+                    r.nextLine();
+                    System.out.println("what is your comment? ");
+                    String comment = r.nextLine();
+                    System.out.println("what is your rate (1 to 5)? ");
+                    rate = r.nextInt();
+                    jarir.showBooks().get(index).addReview(new Review(jarir.getUser(keyUser).getUsername(),comment,rate));
+                    break;
+
+             case 10:
+                 jarir.showBooks();
+                 System.out.println("which book? ");
+                 index = r.nextInt()-1;
+                 r.nextLine();
+
+
+                 System.out.println("the rate of"+ jarir.showBooks().get(index).getTitle()+" is: "+ jarir.showBooks().get(index).getAverageRating());
+
+
+
+
+             break;
+            case 11:
+                       System.out.println("Thank you for visiting us!"); break;
+
+             default: throw new Exception("choose from 1 to 10.");
         }
-
-
-    } catch (Exception e) { System.out.println("#: "+e.getMessage());
+        } catch (Exception e) { System.out.println("#: "+e.getMessage()); r.nextLine();
     }
 }
 }
-public static User createAcc(Scanner r){
+    public static User createAcc(Scanner r){
     System.out.println("Username:");
     r.nextLine();
     String username = r.nextLine();
